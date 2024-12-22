@@ -112,8 +112,9 @@ class ApiService:
 
         user_id = await authenticate_fn(payload.username, payload.password)
 
-        if not user_id or not isinstance(user_id, int | UUID):
-            raise AdminApiException(401, detail="Invalid credentials.")
+        if user_id:
+            if not isinstance(user_id, int | UUID):
+                raise AdminApiException(401, detail="Invalid credentials.")
 
         now = datetime.now(timezone.utc)
         session_expired_at = now + timedelta(seconds=settings.ADMIN_SESSION_EXPIRED_AT)
